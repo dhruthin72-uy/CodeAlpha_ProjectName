@@ -1,0 +1,59 @@
+Remediation steps for safer codes
+Document your findings (mini report)
+
+Secure Coding Review Report
+1. Introduction
+Secure coding is the practice of writing computer programs that are resistant to vulnerabilities and attacks. The main goal is to protect applications from risks such as buffer overflows, injection attacks, memory leaks, and insecure input handling.
+In this task, we review a sample C++ program that contains deliberate security flaws. We identify vulnerabilities, explain their risks, and then provide a secure version of the program with recommended best practices.
+
+2. Vulnerable Program (Unsecure Version)
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
+using namespace std;
+int main() {
+    char name[10];
+    char *data;
+    cout << "Enter your name: ";
+    cin >> name;   // ❌ Unsafe: may cause buffer overflow
+    cout << "Hello, ";
+    cout << name << endl;
+data = (char*)malloc(10);  
+strcpy(data, "Welcome!");  // ❌ Risky: buffer overflow possible
+ // ❌ No free(data)
+    return 0;
+}
+
+3. Vulnerability Analysis (Audit)
+1. Buffer Overflow
+•	Code: cin >> name where name is only 10 characters.
+•	Risk: If the user enters more than 9 characters, it will overwrite memory and may crash or allow malicious code execution.
+2. Unsafe String Copy
+•	Code: strcpy(data, "Welcome!");
+•	Risk: If the destination buffer is too small, this may overwrite memory and corrupt the program.
+3. Memory Leak
+•	Code: malloc(10); without free(data).
+•	Risk: Allocated memory is not released, which can cause memory leaks over time in larger programs.
+4. Secure Program (Fixed Version)
+#include <iostream>
+#include <string>
+using namespace std;
+int main() {
+string name;   // ✅ safer than char array
+ cout << "Enter your name: ";
+ getline(cin, name);   // ✅ safe input handling
+ cout << "Hello, " << name << endl;
+ string data = "Welcome!";  // ✅ safe string, no malloc needed
+ cout << data << endl;
+return 0;
+}
+
+5. Security Improvements
+•	Use of std::string
+•	Prevents buffer overflow because strings automatically adjust size.
+•	Safe Input Handling with getline()
+•	Accepts full user input without truncation or overflow.
+•	Avoiding Raw Pointers & malloc
+•	Instead of manual memory allocation, C++ std::string automatically manages memory. 
+•	Automatic Memory Management
+•	No need to use free() — reduces risk of memory leaks

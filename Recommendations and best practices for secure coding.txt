@@ -1,0 +1,8 @@
+Recommendations and best practices for secure coding
+
+Best Secure Coding Practices
+•	Use std::string instead of raw char[].
+•	Avoid manual memory (malloc, free) → prefer automatic memory management.
+•	Always validate input length.
+•	Use getline() instead of cin >> for safe input.
+•	Free allocated memory if used.
